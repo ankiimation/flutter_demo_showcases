@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:theme_switcher/switchable_theme.dart';
 
 void main() {
   runApp(MyApp());
@@ -8,15 +9,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      /// default theme
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ThemeSwitcher(
+      theme: SwitchableThemeData(
+        themeData: ThemeData.dark(),
       ),
-
-      /// dark theme (will auto switch with device)
-      darkTheme: ThemeData.dark(),
-      home: ComponentsScreen(),
+      builder: (context, switchableTheme) {
+        return MaterialApp(
+            home: Scaffold(
+          body: Card(
+            color: ThemeSwitcher.of(context).themeData.cardColor,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('theme.cardColor'),
+            ),
+          ),
+        ));
+      },
     );
   }
 }
@@ -26,7 +34,7 @@ class ComponentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = MyThemeData.of(context);
+    final theme = ThemeSwitcher.of(context).themeData;
     return Scaffold(
       body: ListView(
         children: [
